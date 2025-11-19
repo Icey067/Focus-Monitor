@@ -1,5 +1,5 @@
 
-# Concentration-Tracker
+# Focus Monitor
 
 A real-time Concentration Tracker built with MediaPipe and OpenCV. It detects face, eyes, and head pose to estimate focus level — useful for online-exam monitoring or attention-tracking demos.
 

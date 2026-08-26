@@ -1,35 +1,40 @@
-
 # Focus Monitor
 
-A real-time Focus Monitor built with MediaPipe and OpenCV. It detects face, eyes, and head pose to estimate focus level — useful for online-exam monitoring or attention-tracking demos.
+A real-time Focus Monitor built with **MediaPipe** and **OpenCV**. It intelligently tracks your face, eyes, head pose, and even background noise to estimate a real-time "focus level". It's a great tool for tracking your attention span while studying, working, or for building online-exam proctoring systems.
 
-## Features
+---
 
-* Real-time face & eye detection using MediaPipe Face Mesh
-* Eye-closure timer (warns if eyes closed > 3 s)
-* Auto-exit when no face detected > 10 s
-* Concentration score bar (0-100 %)
-* Detects noise and gives warning
+## 🎯 Features
 
-## ⚠️ Setup & Installation
+*   **Real-time Facial Tracking:** Leverages MediaPipe Face Mesh for accurate, real-time facial landmark detection.
+*   **Gaze & Head Pose Estimation:** Calculates whether you are looking center, left, right, up, or down.
+*   **Audio Monitoring:** Uses `sounddevice` to calibrate background noise and detect loud noises that might indicate distraction.
+*   **Eye Closure & Sleep Warning:** Alerts you with a "WAKE UP!" prompt if your eyes remain closed for more than 3 seconds.
+*   **Absence Detection:** Automatically exits the program if no face is detected for an extended period (10 seconds).
+*   **Dynamic Focus Score:** Calculates a 0-100% focus score based on head pose, gaze direction, blinking rates, and background noise.
 
-This project requires Python 3.11.
+## 🛠 Prerequisites
 
-> **Note:** The mediapipe library does not yet support newer Python versions (like 3.12+). To run this project, you must use a virtual environment based on Python 3.11.
+*   **Python 3.11** (Highly recommended due to `mediapipe` library compatibility).
+*   A working **webcam**.
+*   A working **microphone** (optional, but required for the noise detection feature).
 
-### Quickstart
+## 🚀 Setup & Installation
 
-#### 1. Install Python 3.11
+> **Note:** The `mediapipe` library may have issues with newer Python versions (like 3.12+). To ensure this project runs smoothly, it is recommended to use a virtual environment based on **Python 3.11**.
 
-Ensure you have Python 3.11 installed on your system.
+### 1. Clone the Repository
 
-If you don't, download it from the official Python website or use your system's package manager (like apt for Debian/Ubuntu or brew for macOS).
+```bash
+git clone https://github.com/yourusername/focus-monitor.git
+cd focus-monitor
+```
 
-#### 2. Create a Virtual Environment
+*(If you already have the files locally, just navigate to the project folder).*
 
-Navigate to this project's directory in your terminal.
+### 2. Create a Virtual Environment
 
-Run the command that matches your Python 3.11 installation:
+Navigate to this project's directory in your terminal and run the command that matches your Python 3.11 installation:
 
 ```bash
 # On Linux/macOS (if 'python3.11' is available):
@@ -42,9 +47,7 @@ py -3.11 -m venv .venv
 python3 -m venv .venv
 ```
 
-#### 3. Activate the Environment
-
-Run the command for your operating system:
+### 3. Activate the Environment
 
 ```bash
 # On Linux/macOS:
@@ -57,18 +60,41 @@ source .venv/bin/activate
 .\.venv\Scripts\Activate.ps1
 ```
 
-#### 4. Install Dependencies
+### 4. Install Dependencies
 
-With your virtual environment active, install the packages:
+With your virtual environment active, install the required packages:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-#### 5. Run the Tracker
+## 🎮 Usage
+
+Run the main script to start the tracker:
 
 ```bash
 python ml.py
 ```
 
-To stop, press `q`
+### Calibration Phase
+1.  **Audio Calibration:** Upon starting, the script will ask you to stay quiet for 1 second. This establishes a baseline for ambient noise.
+2.  **Visual Calibration:** You will be prompted to look directly at the camera for 3 seconds. The program measures your baseline iris positions to calibrate gaze estimation.
+
+### Monitoring Phase
+*   The script will display a window with your webcam feed.
+*   You will see an overlaid **Focus Score**, your current **Status** (e.g., FOCUSED, DISTRACTED, BLINK, NO FACE), and your **Looking Direction**.
+*   To quit the application, press the **`q`** key on your keyboard while focused on the video window.
+
+## ⚙️ Configuration
+
+You can tweak the constants at the top of the `FocusMonitor` `__init__` method in `ml.py` to adjust sensitivities:
+
+*   `SECONDS_TO_CALIBRATE`: Time given for eye calibration.
+*   `BLINK_THRESHOLD`: Eye Aspect Ratio threshold to register a blink.
+*   `GAZE_SENSITIVITY`: Sensitivity for determining if you are looking away from the center.
+*   `AUDIO_SENSITIVITY`: Multiplier over the baseline audio level to trigger a "noise" penalty.
+*   `SECONDS_FOR_EYES_CLOSED_WARNING`: How long eyes must be closed before the "WAKE UP!" text appears.
+
+## 📝 License
+
+See the [LICENSE](LICENSE) file for more information.
